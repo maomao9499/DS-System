@@ -25,7 +25,7 @@ export async function Navbar() {
   const session = await auth(); // 获取当前用户的会话信息
   const isLoggedIn = !!session?.user; // 判断用户是否已登录
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-8">
         {/* 左侧区域：Logo & PC端导航 */}
         <div className="flex items-center gap-6">
@@ -80,7 +80,7 @@ export async function Navbar() {
                 <span className="sr-only">打开菜单</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-[240px] sm:w-[300px]">
+            <SheetContent side="left" className="w-60 sm:w-75">
               <SheetHeader>
                 <SheetTitle className="text-left">数据科学+</SheetTitle>
               </SheetHeader>

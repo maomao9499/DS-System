@@ -29,4 +29,52 @@ model User {
 
   // 预留后续关系：比如 Submission (作业提交记录) 等
   // submissions Submission[]
+  courses         Course[]
+  authoredCourses Course[]     @relation("TeacherCourses")
+  enrolledCourses Enrollment[]
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String
+  description String?      @db.Text
+  coverImage  String?
+  published   Boolean      @default(false)
+  teacherId   String
+  teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id])
+  students    Enrollment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User?        @relation(fields: [userId], references: [id])
+  userId      String?
+  // 新增：与课时的一对多关联
+  lessons     Lesson[]
+}
+
+// ================= 新增 Lesson 模型 =================
+model Lesson {
+  id          String  @id @default(cuid())
+  title       String
+  content     String? @db.Text // 用于存储 Markdown 格式的实训指导书
+  position    Int // 用于课时排序
+  isPublished Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId]) // 优化查询性能
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  studentId String
+  courseId  String
+  student   User     @relation(fields: [studentId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, courseId]) // 防止重复选课
 }

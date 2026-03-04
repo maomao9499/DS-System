@@ -17,7 +17,7 @@ export function LoginModal() {
 
   return (
     <Dialog defaultOpen onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[400px]">
+      <DialogContent className="sm:max-w-100">
         <DialogHeader className="text-center">
           <DialogTitle className="text-2xl tracking-tight">
             欢迎回来
