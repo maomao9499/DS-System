@@ -1,5 +1,6 @@
 // auth.ts
 import NextAuth from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { authConfig } from "@/auth.config";
 import { z } from "zod";
@@ -78,7 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        (token as JWT & { role?: string }).role = user.role;
       }
       return token;
     },
@@ -87,8 +88,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
-      if (token.role && session.user) {
-        session.user.role = token.role as any;
+      if ((token as JWT & { role?: string }).role && session.user) {
+        session.user.role = (token as JWT & { role?: string }).role;
       }
       return session;
     },
