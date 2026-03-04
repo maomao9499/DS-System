@@ -46,7 +46,14 @@ export default async function CoursesPage() {
         {courses.map((course) => (
           <CourseCard
             key={course.id}
-            course={course}
+            course={{
+              ...course,
+              coverImage: course.coverImage ?? undefined,
+              teacher: {
+                ...course.teacher,
+                name: course.teacher.name ?? "未知教师",
+              },
+            }}
             isEnrolled={enrolledCourseIds.includes(course.id)}
           />
         ))}

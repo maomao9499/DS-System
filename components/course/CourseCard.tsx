@@ -8,22 +8,33 @@ import {
 import { Button } from "@/components/ui/button";
 import { enrollCourse } from "@/lib/actions/course";
 import Link from "next/link"; // 引入 Link
+import Image from "next/image";
+
+interface Course {
+  id: string;
+  title: string;
+  coverImage?: string;
+  teacher?: {
+    name: string;
+  };
+}
 
 export function CourseCard({
   course,
   isEnrolled,
 }: {
-  course: any;
+  course: Course;
   isEnrolled: boolean;
 }) {
   return (
     <Card className="overflow-hidden flex flex-col">
       <div className="aspect-video bg-muted flex items-center justify-center relative">
         {course.coverImage ? (
-          <img
+          <Image
             src={course.coverImage}
             alt={course.title}
-            className="object-cover w-full h-full"
+            fill
+            className="object-cover"
           />
         ) : (
           <span className="text-muted-foreground">暂无封面</span>

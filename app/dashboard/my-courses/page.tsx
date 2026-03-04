@@ -26,7 +26,18 @@ export default async function StudentMyCoursesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {enrollments.map((e) => (
-          <CourseCard key={e.id} course={e.course} isEnrolled={true} />
+          <CourseCard
+            key={e.id}
+            course={{
+              ...e.course,
+              coverImage: e.course.coverImage ?? undefined,
+              teacher: {
+                ...e.course.teacher,
+                name: e.course.teacher.name ?? "未知教师",
+              },
+            }}
+            isEnrolled={true}
+          />
         ))}
 
         {enrollments.length === 0 && (
