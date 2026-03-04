@@ -1,0 +1,32 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 我们选择 PostgreSQL，如果你更习惯 MySQL，把这里改成 "mysql" 即可
+datasource db {
+  provider = "postgresql"
+}
+
+// 定义用户角色枚举
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+// 核心用户表
+model User {
+  id       String  @id @default(cuid())
+  name     String? // 真实姓名
+  email    String  @unique // 登录账号
+  password String // 加密后的密码
+  role     Role    @default(STUDENT) // 默认注册为学生
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 预留后续关系：比如 Submission (作业提交记录) 等
+  // submissions Submission[]
+}

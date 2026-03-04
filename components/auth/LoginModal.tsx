@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import {
   Dialog,
@@ -8,17 +7,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { LoginForm } from "@/components/auth/LoginForm"; // 引入抽离的表单
 
 export function LoginModal() {
   const router = useRouter();
-
-  // 当弹窗状态改变（比如点击遮罩层关闭）时触发
   const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      router.back(); // 关闭弹窗时，URL 回退
-    }
+    if (!open) router.back();
   };
 
   return (
@@ -30,15 +24,7 @@ export function LoginModal() {
           </DialogTitle>
           <DialogDescription>登录你的数据科学+微专业账号</DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid gap-2">
-            <Input id="email" type="email" placeholder="邮箱地址" />
-          </div>
-          <div className="grid gap-2">
-            <Input id="password" type="password" placeholder="密码" />
-          </div>
-          <Button className="w-full">登录</Button>
-        </div>
+        <LoginForm /> {/* 直接使用 */}
       </DialogContent>
     </Dialog>
   );
