@@ -10,6 +10,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { auth } from "@/lib/auth"; // <--- 引入 auth
+import { LogoutButton } from "@/components/auth/LogoutButton"; // <--- 登出的按钮
 
 // 将导航数据提取出来，方便 PC 端和移动端复用
 const routes = [
@@ -17,10 +19,11 @@ const routes = [
   { href: "/platform", label: "数据实训" },
   { href: "/projects", label: "成果展示" },
   { href: "/members", label: "团队成员" },
-  { href: "/new", label: "新增页面" },
 ];
 
-export function Navbar() {
+export async function Navbar() {
+  const session = await auth(); // 获取当前用户的会话信息
+  const isLoggedIn = !!session?.user; // 判断用户是否已登录
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-8">
@@ -50,14 +53,24 @@ export function Navbar() {
         <div className="flex items-center space-x-2 md:space-x-4">
           <ThemeToggle />
 
-          <Button
-            asChild
-            variant="default"
-            size="sm"
-            className="hidden sm:flex"
-          >
-            <Link href="/login">登录</Link>
-          </Button>
+          {/* 【魔法发生在这里】PC 端动态渲染 登录登出按钮的动态切换 */}
+          <div className="hidden sm:flex items-center space-x-4">
+            {isLoggedIn ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="text-sm font-medium hover:underline text-muted-foreground"
+                >
+                  进入工作区
+                </Link>
+                <LogoutButton variant="outline" showIcon={false} />
+              </>
+            ) : (
+              <Button asChild variant="default" size="sm">
+                <Link href="/login">登录</Link>
+              </Button>
+            )}
+          </div>
 
           {/* 【移动端导航 (Sheet)】只有在 md (768px) 以下才显示 */}
           <Sheet>
@@ -82,10 +95,20 @@ export function Navbar() {
                   </Link>
                 ))}
                 {/* 手机端把登录按钮也放进抽屉里 */}
-                <div className="mt-4 pt-4 border-t sm:hidden">
-                  <Button asChild className="w-full">
-                    <Link href="/login">立即登录</Link>
-                  </Button>
+                {/* 【魔法发生在这里】移动端抽屉动态渲染 */}
+                <div className="mt-4 pt-4 border-t sm:hidden flex flex-col gap-3">
+                  {isLoggedIn ? (
+                    <>
+                      <Button asChild variant="default" className="w-full">
+                        <Link href="/dashboard">进入工作区</Link>
+                      </Button>
+                      <LogoutButton variant="outline" className="w-full" />
+                    </>
+                  ) : (
+                    <Button asChild className="w-full">
+                      <Link href="/login">立即登录</Link>
+                    </Button>
+                  )}
                 </div>
               </nav>
             </SheetContent>
