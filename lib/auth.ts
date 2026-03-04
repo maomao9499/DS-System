@@ -5,6 +5,22 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 
+// 扩展 NextAuth v5 的类型
+declare module "next-auth" {
+  interface User {
+    role?: string;
+  }
+  interface Session {
+    user: {
+      id?: string;
+      email?: string;
+      name?: string | null;
+      image?: string | null;
+      role?: string;
+    };
+  }
+}
+
 // 定义登录表单的校验规则
 const loginSchema = z.object({
   email: z.string().email({ message: "无效的邮箱格式" }),
