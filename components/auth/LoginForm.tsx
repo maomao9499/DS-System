@@ -29,7 +29,7 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema as any), // 适配 zodResolver 的类型
     defaultValues: { email: "", password: "" },
   });
 
