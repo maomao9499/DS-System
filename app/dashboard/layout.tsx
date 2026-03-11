@@ -29,9 +29,9 @@ export default async function DashboardLayout({
           },
         ]
       : [
-          { href: "/dashboard", icon: LayoutDashboard, label: "学习看板" },
-          { href: "/dashboard/my-courses", icon: BookOpen, label: "我的课程" },
-          { href: "/dashboard/lab", icon: Database, label: "数据实训室" },
+          { href: "/dashboard", label: "学习看板" },
+          { href: "/dashboard/my-courses", label: "我的课程" },
+          { href: "/dashboard/lab", label: "数据实训室" },
         ];
 
   return (
