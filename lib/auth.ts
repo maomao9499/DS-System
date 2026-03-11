@@ -1,4 +1,4 @@
-// auth.ts
+// lib/auth.ts
 import NextAuth from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";

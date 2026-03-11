@@ -1,5 +1,5 @@
 "use client";
-
+import { useRouter } from "next/navigation"; // 新增导入
 import { useState, useRef } from "react"; // 引入 useRef
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ export function LessonEditor({
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState(lesson.content || "");
   const fileInputRef = useRef<HTMLInputElement>(null); // 用于触发隐藏的文件上传框
+  const router = useRouter(); // 新增
 
   // 处理文件上传并读取内容
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +53,7 @@ export function LessonEditor({
     try {
       await updateLesson(courseId, lesson.id, formData);
       alert("课时内容保存成功！");
+      router.back(); // 保存成功后返回上一页
     } catch (error) {
       console.error(error);
       alert("保存失败，请检查网络或权限");

@@ -33,7 +33,6 @@ export async function enrollCourse(courseId: string) {
       courseId: courseId,
     },
   });
-
   revalidatePath("/dashboard");
   revalidatePath("/courses");
 }

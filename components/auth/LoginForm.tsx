@@ -63,7 +63,7 @@ export function LoginForm() {
         <Input
           id="email"
           type="email"
-          placeholder="邮箱地址 (例如: student@test.com)"
+          placeholder="邮箱地址"
           disabled={isLoading}
           {...register("email")}
         />
