@@ -15,23 +15,29 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  const role = session.user.role;
+  // 添加类型断言，因为前面已校验登录
+  const role = (session.user.role || "STUDENT") as "TEACHER" | "STUDENT";
 
   const sidebarLinks =
     role === "TEACHER"
       ? [
-          { href: "/dashboard", label: "教学看板" },
-          { href: "/dashboard/courses", label: "课程管理" },
-          { href: "/dashboard/students", label: "学生管理" },
+          { href: "/dashboard", icon: "LayoutDashboard", label: "教学看板" },
+          { href: "/dashboard/courses", icon: "BookOpen", label: "课程管理" },
+          { href: "/dashboard/students", icon: "Users", label: "学生管理" },
           {
             href: "/dashboard/datasets",
+            icon: "Database",
             label: "实训数据分发",
           },
         ]
       : [
-          { href: "/dashboard", label: "学习看板" },
-          { href: "/dashboard/my-courses", label: "我的课程" },
-          { href: "/dashboard/lab", label: "数据实训室" },
+          { href: "/dashboard", icon: "LayoutDashboard", label: "学习看板" },
+          {
+            href: "/dashboard/my-courses",
+            icon: "BookOpen",
+            label: "我的课程",
+          },
+          { href: "/dashboard/lab", icon: "Database", label: "数据实训室" },
         ];
 
   return (

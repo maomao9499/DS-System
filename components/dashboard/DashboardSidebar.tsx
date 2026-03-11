@@ -50,17 +50,21 @@ export function DashboardSidebar({
       )}
     >
       {/* 顶部：Logo + 折叠按钮 */}
-      <div className="mb-6 flex items-center justify-between">
-        {!collapsed && (
-          <div className="font-bold text-lg tracking-tight">
-            数据科学<span className="text-primary">+</span>
-          </div>
-        )}
+      <div className="mb-6 flex items-center gap-2">
+        {/* Logo 始终渲染，用 opacity + width 控制显隐 */}
+        <div
+          className={cn(
+            "font-bold text-lg tracking-tight whitespace-nowrap overflow-hidden transition-all duration-300",
+            collapsed ? "w-0 opacity-0" : "w-auto opacity-100",
+          )}
+        >
+          数据科学<span className="text-primary">+</span>
+        </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setCollapsed(!collapsed)}
-          className="h-8 w-8"
+          className="h-8 w-8 flex-shrink-0"
         >
           {collapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -87,7 +91,16 @@ export function DashboardSidebar({
                 {Icon && (
                   <Icon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
                 )}
-                {!collapsed && <span>{link.label}</span>}
+                <span
+                  className={cn(
+                    "whitespace-nowrap transition-all duration-300",
+                    collapsed
+                      ? "max-w-0 opacity-0"
+                      : "max-w-[200px] opacity-100",
+                  )}
+                >
+                  {link.label}
+                </span>{" "}
               </Button>
             </Link>
           );
