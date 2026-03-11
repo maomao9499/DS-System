@@ -16,6 +16,27 @@ enum Role {
   ADMIN
 }
 
+// 题目类型枚举 (阶段 3.2 新增)
+enum QuestionType {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  FILL_BLANK
+  PROGRAMMING
+}
+
+// 作业提交状态枚举 (阶段 3.2 新增)
+enum SubmissionStatus {
+  PENDING // 未提交/草稿
+  AUTO_GRADED // 已完成机评，等待人评（若包含主观题）
+  COMPLETED // 批改完成（最终得分已出）
+}
+
+// 题目判分规则枚举 (阶段 3.2 新增)
+enum GradingType {
+  AUTO_STRICT // 严格自动判分（客观题、有断言的编程题）
+  MANUAL_REVIEW // 需要教师人工批阅（主观分析编程题、无标准答案题）
+}
+
 // 核心用户表
 model User {
   id       String  @id @default(cuid())
@@ -32,6 +53,7 @@ model User {
   courses         Course[]
   authoredCourses Course[]     @relation("TeacherCourses")
   enrolledCourses Enrollment[]
+  submissions     Submission[] // 阶段 3.2 新增：该学生的作业提交记录
 }
 
 model Course {
@@ -49,6 +71,7 @@ model Course {
   userId      String?
   // 新增：与课时的一对多关联
   lessons     Lesson[]
+  assignments Assignment[] // 阶段 3.2 新增：课程下的实训作业
 }
 
 // ================= 新增 Lesson 模型 =================
@@ -77,4 +100,72 @@ model Enrollment {
   createdAt DateTime @default(now())
 
   @@unique([studentId, courseId]) // 防止重复选课
+}
+
+// ==========================================
+// 3. 实训与作业系统模型 (阶段 3.2 核心黑科技)
+// ==========================================
+
+// 作业/实训表
+model Assignment {
+  id          String  @id @default(cuid())
+  title       String
+  description String? @db.Text // 作业整体要求说明 (支持 Markdown)
+  published   Boolean @default(false)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  questions   Question[]
+  submissions Submission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 具体题目表
+model Question {
+  id           String     @id @default(cuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  type        QuestionType
+  gradingType GradingType  @default(AUTO_STRICT)
+
+  content String @db.Text // 题干内容（支持 Markdown）
+
+  // 核心字段：多态 JSON 元数据
+  // - 选择题: { "options": ["A", "B"], "correct": ["A"] }
+  // - 填空题: { "correct": ["答案1", "答案2"] }
+  // - 编程题: { "initialCode": "...", "testCases": [{ "input": "...", "expected": "..." }] }
+  metadata Json
+
+  score Int @default(10) // 该题的满分分值
+  order Int @default(0) // 题目排序
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 学生提交记录表
+model Submission {
+  id        String @id @default(cuid())
+  studentId String
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  // 核心字段：学生作答详情 (JSON 数组)
+  // 格式示例: [{ "questionId": "q1", "answer": "A", "score": 10, "isCorrect": true }, { "questionId": "q2", "answer": "def sum...", "output": "...", "score": 0 }]
+  answers Json
+
+  totalScore      Int? // 系统机评 + 教师人评 的总分
+  status          SubmissionStatus @default(PENDING)
+  teacherFeedback String?          @db.Text // 老师的总体评语
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, assignmentId]) // 通常设定一个学生对一个作业只能有一条最终提交记录（如果允许重复提交，可以去掉此约束）
 }

@@ -5,7 +5,7 @@ import { CourseEditor } from "./_components/CourseEditor";
 import { LessonList } from "./_components/LessonList"; // 新增引入
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-
+import { AssignmentList } from "./_components/AssignmentList"; // 新增引入
 export default async function CourseDetailPage({
   params,
 }: {
@@ -20,6 +20,9 @@ export default async function CourseDetailPage({
     include: {
       lessons: {
         orderBy: { position: "asc" },
+      },
+      assignments: {
+        orderBy: { createdAt: "asc" }, // 作业按创建时间正序排
       },
     },
   });
@@ -53,10 +56,15 @@ export default async function CourseDetailPage({
           <CourseEditor course={course} />
         </div>
 
-        {/* 右侧：课时大纲管理 */}
+        {/* 右侧：课时大纲管理（课时 + 作业） */}
         <div className="space-y-4">
           {/* 传入 lessons 数据 */}
           <LessonList courseId={course.id} initialLessons={course.lessons} />
+          {/* 2. 作业列表组件 */}
+          <AssignmentList
+            courseId={course.id}
+            initialAssignments={course.assignments}
+          />
         </div>
       </div>
     </div>
