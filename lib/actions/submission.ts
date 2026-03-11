@@ -16,7 +16,8 @@ export async function submitAssignmentAction(
 ) {
   try {
     const session = await auth();
-    if (!session?.user) throw new Error("未登录");
+    // 明确校验 user.id 的存在性，让 TS 百分百确信它是一个 string
+    if (!session?.user?.id) throw new Error("未登录或获取用户ID失败");
 
     const studentId = session.user.id;
 

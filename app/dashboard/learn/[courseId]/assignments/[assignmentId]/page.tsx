@@ -10,8 +10,11 @@ export default async function StudentAssignmentPage({
   const session = await auth();
   const { courseId, assignmentId } = await params;
 
-  if (!session?.user) redirect("/login");
+  // 1. 严格校验 user.id 的存在性
+  if (!session?.user?.id) redirect("/login");
 
+  // 2. 将收窄类型后的 id 赋值给一个常量，此时 TS 百分之百确信 userId 是纯 string
+  const userId = session.user.id;
   // 1. 获取作业及题目信息
   const assignment = await db.assignment.findUnique({
     where: { id: assignmentId },
@@ -49,7 +52,7 @@ export default async function StudentAssignmentPage({
   const existingSubmission = await db.submission.findUnique({
     where: {
       studentId_assignmentId: {
-        studentId: session.user.id,
+        studentId: userId,
         assignmentId: assignment.id,
       },
     },

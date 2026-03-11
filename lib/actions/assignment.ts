@@ -9,7 +9,7 @@ interface QuestionData {
   type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE" | "FILL_BLANK" | "PROGRAMMING";
   content: string;
   score: number;
-  metadata: any;
+  metadata?: any;
 }
 
 interface AssignmentData {

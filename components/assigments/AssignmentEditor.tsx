@@ -42,13 +42,14 @@ const assignmentSchema = z.object({
 });
 
 type AssignmentFormValues = z.infer<typeof assignmentSchema>;
+type AssignmentInitialData = AssignmentFormValues & { id?: string };
 
 export function AssignmentEditor({
   courseId,
   initialData,
 }: {
   courseId: string;
-  initialData?: AssignmentFormValues;
+  initialData?: AssignmentInitialData;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
