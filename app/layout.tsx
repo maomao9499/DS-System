@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/next"; // 全局引入 Vercel Analytics 访客分析
 // 配置基础字体
 const inter = Inter({ subsets: ["latin"] });
 
