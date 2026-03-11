@@ -1,9 +1,7 @@
 // app/dashboard/layout.tsx
 import { redirect } from "next/navigation";
-
 import { auth } from "@/lib/auth";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
-
 export default async function DashboardLayout({
   children,
 }: {
@@ -14,7 +12,6 @@ export default async function DashboardLayout({
   if (!session?.user) {
     redirect("/login");
   }
-
   // 添加类型断言，因为前面已校验登录
   const role = (session.user.role || "STUDENT") as "TEACHER" | "STUDENT";
 
