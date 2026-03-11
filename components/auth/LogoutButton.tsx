@@ -1,36 +1,30 @@
 // components/auth/LogoutButton.tsx
 "use client";
-
-import { signOut } from "next-auth/react";
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 
 interface LogoutButtonProps {
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
+  variant?: "default" | "outline" | "ghost" | "link";
   className?: string;
   showIcon?: boolean;
+  showText?: boolean;
 }
 
 export function LogoutButton({
   variant = "outline",
   className,
   showIcon = true,
+  showText = true,
 }: LogoutButtonProps) {
   return (
-    // 调用 signOut 并指定退出后跳转回首页 ('/')
     <Button
       variant={variant}
       className={className}
       onClick={() => signOut({ callbackUrl: "/" })}
     >
-      {showIcon && <LogOut className="mr-2 h-4 w-4" />}
-      退出登录
+      {showIcon && <LogOut className="h-4 w-4" />}
+      {showText && <span>退出登录</span>}
     </Button>
   );
 }
