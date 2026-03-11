@@ -39,6 +39,7 @@ export default function RootLayout({
           </div>
           {modal}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
