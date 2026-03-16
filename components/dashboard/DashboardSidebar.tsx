@@ -11,6 +11,7 @@ import {
   Users,
   Database,
   LucideIcon,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LogoutButton } from "@/components/auth/LogoutButton";
@@ -22,6 +23,7 @@ const iconMap: Record<string, LucideIcon> = {
   BookOpen,
   Users,
   Database,
+  MessageSquare,
 };
 interface SidebarLink {
   href: string;
