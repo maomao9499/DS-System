@@ -21,7 +21,7 @@ export default async function DashboardLayout({
           { href: "/dashboard", icon: "LayoutDashboard", label: "教学看板" },
           { href: "/dashboard/courses", icon: "BookOpen", label: "课程管理" },
           { href: "/dashboard/students", icon: "Users", label: "学生管理" },
-          { href: "dashboard/aichat", icon: "MessageSquare", label: "AI 助手" },
+          { href: "/dashboard/aichat", icon: "MessageSquare", label: "AI 助手" },
           {
             href: "/dashboard/datasets",
             icon: "Database",
@@ -35,7 +35,7 @@ export default async function DashboardLayout({
             icon: "BookOpen",
             label: "我的课程",
           },
-          { href: "dashboard/aichat", icon: "MessageSquare", label: "AI 助手" },
+          { href: "/dashboard/aichat", icon: "MessageSquare", label: "AI 助手" },
           { href: "/dashboard/lab", icon: "Database", label: "数据实训室" },
         ];
 
