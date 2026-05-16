@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(node -e \"const { PrismaClient } = require\\('@prisma/client'\\); console.log\\('OK:', typeof PrismaClient\\);\")",
+      "Bash(node -e \"const { PrismaPg } = require\\('@prisma/adapter-pg'\\); console.log\\('PrismaPg:', typeof PrismaPg\\);\")",
+      "Bash(taskkill //F //IM node.exe)"
+    ]
+  }
+}

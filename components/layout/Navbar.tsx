@@ -25,6 +25,24 @@ const routes = [
 export async function Navbar() {
   const session = await auth();
   const isLoggedIn = !!session?.user;
+  const role = (session?.user?.role || "STUDENT") as "TEACHER" | "STUDENT";
+
+  const dashboardLinks =
+    role === "TEACHER"
+      ? [
+          { href: "/dashboard", label: "教学看板" },
+          { href: "/dashboard/courses", label: "课程管理" },
+          { href: "/dashboard/students", label: "学生管理" },
+          { href: "/dashboard/aichat", label: "AI 助手" },
+          { href: "/dashboard/datasets", label: "实训数据分发" },
+        ]
+      : [
+          { href: "/dashboard", label: "学习看板" },
+          { href: "/dashboard/my-courses", label: "我的课程" },
+          { href: "/dashboard/aichat", label: "AI 助手" },
+          { href: "/dashboard/lab", label: "数据实训室" },
+        ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 md:px-8">
@@ -81,6 +99,7 @@ export async function Navbar() {
                 </SheetClose>
               </SheetHeader>
               <nav className="flex flex-col gap-4 mt-6">
+                {/* 公共页面路由 */}
                 {routes.map((route) => (
                   <SheetClose asChild key={route.href}>
                     <Link
@@ -91,21 +110,30 @@ export async function Navbar() {
                     </Link>
                   </SheetClose>
                 ))}
-                {/* 手机端把登录按钮也放进抽屉里 */}
-                <div className="mt-4 pt-4 border-t sm:hidden flex flex-col gap-3">
+                {/* 工作区导航 (仅登录后显示，与桌面端 Sidebar 一致) */}
+                {isLoggedIn && (
+                  <>
+                    <div className="mt-2 border-t" />
+                    {dashboardLinks.map((link) => (
+                      <SheetClose asChild key={link.href}>
+                        <Link
+                          href={link.href}
+                          className="text-base font-medium text-muted-foreground hover:text-foreground"
+                        >
+                          {link.label}
+                        </Link>
+                      </SheetClose>
+                    ))}
+                  </>
+                )}
+                {/* 手机端登录/登出 */}
+                <div className="mt-4 pt-4 border-t flex flex-col gap-3">
                   {isLoggedIn ? (
-                    <>
-                      <SheetClose asChild>
-                        <Button asChild variant="default" className="w-full">
-                          <Link href="/dashboard">工作区</Link>
-                        </Button>
-                      </SheetClose>
-                      <SheetClose asChild>
-                        <div>
-                          <LogoutButton variant="outline" className="w-full" />
-                        </div>
-                      </SheetClose>
-                    </>
+                    <SheetClose asChild>
+                      <div>
+                        <LogoutButton variant="outline" className="w-full" />
+                      </div>
+                    </SheetClose>
                   ) : (
                     <SheetClose asChild>
                       <Button asChild className="w-full">

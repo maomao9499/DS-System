@@ -18,8 +18,9 @@ const qwen = createOpenAI({
 });
 
 // 3. 初始化 DeepSeek (复用 OpenAI 的客户端，修改 BaseURL)
+// 注意：DeepSeek 不支持 OpenAI Responses API，必须用 .chat() 走 /chat/completions
 const deepseek = createOpenAI({
-  baseURL: "https://api.deepseek.com/v1",
+  baseURL: "https://api.deepseek.com",
   apiKey: process.env.DEEPSEEK_API_KEY,
 });
 
@@ -27,7 +28,7 @@ const deepseek = createOpenAI({
 export const aiProviders = {
   openai: openai("gpt-4o"),
   google: google("gemini-3-flash-preview"),
-  deepseek: deepseek("deepseek-coder"), // 专为代码场景优化的模型
+  deepseek: deepseek.chat("deepseek-v4-pro"), // .chat() 强制使用 /chat/completions 端点
   // 千问常用模型：qwen-plus, qwen-max, qwen-turbo
   qwen: qwen("qwen-plus"),
 };

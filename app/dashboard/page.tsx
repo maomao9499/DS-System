@@ -1,8 +1,11 @@
 import { auth } from "@/lib/auth";
+import { ActivityChart } from "@/components/dashboard/ActivityChart";
+import { ResourceChart } from "@/components/dashboard/ResourceChart";
+import { QuickActions } from "@/components/dashboard/QuickActions";
 
 export default async function DashboardPage() {
   const session = await auth();
-  const role = session?.user?.role;
+  const role = (session?.user?.role || "STUDENT") as "TEACHER" | "STUDENT";
 
   return (
     <div className="flex flex-col gap-6">
@@ -18,14 +21,14 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 flex items-center justify-center h-40">
-          <span className="text-muted-foreground">ECharts 学习/教学活跃度预留位</span>
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 h-80">
+          <ActivityChart role={role} />
         </div>
-        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 flex items-center justify-center h-40">
-          <span className="text-muted-foreground">ECharts 实训资源消耗预留位</span>
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 h-80">
+          <ResourceChart role={role} />
         </div>
-        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 flex items-center justify-center h-40">
-          <span className="text-muted-foreground">快速操作区</span>
+        <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-6 h-80">
+          <QuickActions role={role} />
         </div>
       </div>
     </div>
