@@ -94,6 +94,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
+  // 信任来自 Nginx 反向代理的 Host 头
+  trustHost: true,
+
   // 自定义登录页面的路径，这样即使被鉴权中间件拦截，也会跳到我们自己写的弹窗或页面
   pages: {
     signIn: "/login",
